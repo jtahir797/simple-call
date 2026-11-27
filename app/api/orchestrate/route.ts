@@ -122,7 +122,8 @@ export async function POST(req: Request) {
         return;
       }
       if (ver.verdict === "verified") {
-        send({ type: "verdict", id, verdict: "verified", issues: ver.issues, check });
+        // An approved deferral is still a deferral: the user must not commit on the call.
+        send({ type: "verdict", id, verdict: ans.defer ? "defer" : "verified", issues: ver.issues, check });
         return;
       }
 

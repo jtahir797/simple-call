@@ -113,7 +113,8 @@ export function useCopilot(ws: Workspace) {
               s.id === m.id
                 ? {
                     ...s,
-                    verdict: m.verdict,
+                    // older recordings sent "verified" for an approved deferral; show it as Defer
+                    verdict: m.verdict === "verified" && s.defer ? "defer" : m.verdict,
                     issues: m.issues,
                     check: m.check ?? s.check,
                     ...(m.sayThis ? { original: s.sayThis, sayThis: m.sayThis, keyPoints: m.keyPoints ?? s.keyPoints, confidence: m.confidence ?? s.confidence } : {}),
