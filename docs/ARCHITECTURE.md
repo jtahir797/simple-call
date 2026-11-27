@@ -144,7 +144,7 @@ lib/guard.ts             origin check, rate limits, input validation
 lib/modes.ts             six call modes
 lib/checklist.ts         knowledge checklist and Claude / ChatGPT prompt
 scripts/                 record the demo run, capture screenshots and the PDF, check the key
-tests/                   37 unit tests
+tests/                   39 unit tests
 docs/brd/                one business requirements doc per feature
 .github/                 CI, CodeQL, Dependabot, PR template, CODEOWNERS
 ```

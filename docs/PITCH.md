@@ -30,7 +30,7 @@ Simple Call is a multi-agent copilot for client calls. The employee loads the pr
 |---|---|
 | Completeness (incl. orchestration) | Pre-call → live → post-call → publish → history. 12 AI agents + 4 tools, parallel and sequential chains, loop-back revision, Agent X-ray on every step |
 | Creativity | Live client psychology with "how to respond now"; US holiday check on promised dates; pre-call Strategist |
-| Technical execution | Key never in code or browser, 37 unit tests, CI with audit and secret scan, input validation, streaming, cache, budget |
+| Technical execution | Key never in code or browser, 39 unit tests, CI with audit and secret scan, input validation, streaming, cache, budget |
 | Presentation | One-click demo, preloaded project, Instant replay fallback, SSI branding |
 | Business value | Faster accurate answers to US clients, no unauthorised commitments, early warning on unhappy clients, minutes and RAID on time, feeds PMO governance |
 

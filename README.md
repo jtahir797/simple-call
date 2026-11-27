@@ -8,7 +8,7 @@ Simple Call sits beside Teams, Meet or Zoom. When the client asks something, it 
 
 **[Open the app](https://YOUR-APP.vercel.app)** · **[User guide](docs/USER-GUIDE.md)** · **[Features (BRDs)](docs/brd/README.md)** · **[Architecture](docs/ARCHITECTURE.md)** · **[Security](docs/SECURITY.md)**
 
-![Tests](https://img.shields.io/badge/tests-37%20passing-2ea44f) ![Next.js 16](https://img.shields.io/badge/Next.js-16-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Claude](https://img.shields.io/badge/Claude-Sonnet%20%2B%20Haiku-404040)
+![Tests](https://img.shields.io/badge/tests-39%20passing-2ea44f) ![Next.js 16](https://img.shields.io/badge/Next.js-16-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Claude](https://img.shields.io/badge/Claude-Sonnet%20%2B%20Haiku-404040)
 
 </div>
 

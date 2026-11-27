@@ -17,7 +17,7 @@ feature branch ──► pull request ──► checks + review ──► merge 
 
    | Check | What it catches |
    |---|---|
-   | Typecheck, test, audit, build | Type errors, broken logic (37 unit tests), vulnerable runtime packages, build failures, committed keys or `.env` files |
+   | Typecheck, test, audit, build | Type errors, broken logic (39 unit tests), vulnerable runtime packages, build failures, committed keys or `.env` files |
    | CodeQL security scan | Injection, XSS and other code-level security issues |
    | Dependency review | New dependencies with known high-severity vulnerabilities |
 
