@@ -2,120 +2,145 @@
 
 # Simple Call
 
-**A team of AI agents on every client call.**
-Fact-checked answers in seconds, the client's mood read live, and the paperwork done when the call ends.
+**Know what to say on every client call.**
 
-SSI Agent-A-Thon 2026 · Bring your own idea
+Simple Call sits beside Teams, Meet or Zoom. When the client asks something, it shows a short, fact-checked answer you can say as it is. It reads how the client is feeling, logs the risks and promises made, and writes the minutes and recap email when the call ends.
 
-**[Live app](https://YOUR-APP.vercel.app)** · **[Presentation (PDF)](docs/Simple-Call-Presentation.pdf)** · **[Architecture](docs/ARCHITECTURE.md)** · **[User guide](docs/USER-GUIDE.md)** · **[Security & cost](docs/SECURITY.md)**
+**[Open the app](https://YOUR-APP.vercel.app)** · **[User guide](docs/USER-GUIDE.md)** · **[Features (BRDs)](docs/brd/README.md)** · **[Architecture](docs/ARCHITECTURE.md)** · **[Security](docs/SECURITY.md)**
 
-![Next.js 16](https://img.shields.io/badge/Next.js-16-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Agents](https://img.shields.io/badge/AI%20agents-12-b91f2a) ![Tests](https://img.shields.io/badge/tests-37%20passing-2ea44f) ![Claude](https://img.shields.io/badge/Claude-Sonnet%20%2B%20Haiku-404040)
+![Tests](https://img.shields.io/badge/tests-37%20passing-2ea44f) ![Next.js 16](https://img.shields.io/badge/Next.js-16-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Claude](https://img.shields.io/badge/Claude-Sonnet%20%2B%20Haiku-404040)
 
 </div>
 
-![Simple Call live call](public/screenshots/live-call.png)
+![Simple Call during a client call](public/screenshots/live-call.png)
 
-## Judges: try it in 90 seconds
+## Why Simple Call
 
-1. Open the **[live app](https://YOUR-APP.vercel.app)**. A complete example project (fictional) is already loaded.
-2. Click **▶ Watch the 90-second demo**. A frustrated US client asks about a slipped demo, the go-live date, a price and SOC 2.
-3. While it plays, click **Verifier** in the orchestration bar: the first draft quoted a price, so it was sent back and rewritten as a deferral.
-4. Click **End call → report**: four agents write the minutes, client psychology, RAID and the recap email.
+Client calls go wrong in three predictable ways:
 
-The slides are also inside the app at **`/present`**.
+| Pain | What happens today | What Simple Call does |
+|---|---|---|
+| **"Is the date still real?"** | The fact sits in a status report or with someone else. The answer is slow or vague. | Finds it in your project knowledge and shows a 1 to 2 sentence answer in seconds. |
+| **"What will it cost?" "Are you SOC 2?"** | A confident guess becomes a commercial or legal problem. | Checks every date and number, flags pricing, legal and certification wording, and turns it into a polite deferral with an owner and timeframe. |
+| **Signals and paperwork** | Frustration and new risks are noticed late. Minutes, RAID and the recap email are written hours later. | Reads the client's mood live, logs risks and commitments as they are said, and drafts the full report when you press *End call*. |
 
-## The problem
+No bot joins the call. Captions run on-device in Chrome and Edge, and your knowledge, transcripts and reports stay in your browser.
 
-Delivery teams in Pakistan take calls with US clients every week. The hard moment is a question you cannot answer on the spot:
-
-- **"Is the date still real?"** The facts sit in a status report or someone else's head.
-- **"What will it cost?" "Are you SOC 2?"** One confident answer becomes a commercial or legal problem.
-- **A frustrated client or a new risk** is noticed late, and minutes, RAID and the recap email are written hours later.
-
-## What Simple Call does
+## What you get
 
 | Before the call | During the call | After the call |
 |---|---|---|
-| Predicts the 5 hardest questions with grounded answers, landmines and an opening line | A fact-checked answer to say, the client's mood with how to respond, and a live risk log. No bot joins the call | Minutes, client psychology, RAID with RAG status and the recap email, ready to edit and publish |
+| **Pre-call brief**: the 5 hardest questions with answers, an opening line, things to avoid, questions to ask | **Say this**: one short answer, marked Verified, Revised or Defer · **Mood**: emotion, trust and how to respond · **Logged**: risks, issues, actions, commitments | **Report**: minutes, client psychology, RAID with RAG status, recap email. Edit, approve and publish to History |
 
-Six call modes: client status · presales · commercial / change request · steering · standup · client interview of our engineers.
+Also: six call modes (client status, presales, commercial, steering, standup, client interview), one-key quick actions (**A** answer, **K** clarify, **R** recap, **F** questions to ask), a narrow *beside the call* view (**V**), and a private mode where everything runs on your laptop.
 
-## How the agents work together
+Each feature is specified in a short BRD: **[docs/brd](docs/brd/README.md)**.
+
+<table>
+<tr>
+<td width="50%"><img src="public/screenshots/live-answer.png" alt="Answer card"><br/><sub>One answer to say, fact-checked, with a US holiday warning</sub></td>
+<td width="50%"><img src="public/screenshots/report.png" alt="After-call report"><br/><sub>After-call report, ready to edit and publish</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="public/screenshots/knowledge.png" alt="Knowledge tab"><br/><sub>Load a project in about 5 minutes</sub></td>
+<td width="50%"><img src="public/screenshots/agent-xray.png" alt="Agent steps"><br/><sub>Agent steps: see what each agent decided</sub></td>
+</tr>
+</table>
+
+## Get started
+
+### Use it in the browser (no install)
+
+1. Open **[the app](https://YOUR-APP.vercel.app)** in Chrome or Edge. A fictional example project is already loaded.
+2. Press **▶ Try the demo call** to see a 90-second US client call with live answers.
+3. To use it for your own project, follow the **[user guide](docs/USER-GUIDE.md)**: add knowledge, prepare, start live captions, publish the report.
+
+The hosted app is for fictional or public material. For real client data use private mode or a deployment approved for it.
+
+### Run it on your laptop
+
+Needs Node.js 22 or later.
+
+```bash
+git clone https://github.com/jtahir797/simple-call.git
+cd simple-call
+npm install
+cp .env.example .env.local      # add your AI gateway address, key and model names
+npm run dev                     # open http://localhost:3000
+```
+
+`.env.local` is git-ignored. Never commit a key. Run `node scripts/doctor.mjs` to check the key and models without printing them.
+
+### Private mode (nothing leaves the laptop)
+
+Install [Ollama](https://ollama.com), then:
+
+```bash
+ollama pull qwen2.5:7b && ollama pull llama3.2:3b
+cp .env.private.example .env.local
+npm install && npm run private  # open http://127.0.0.1:3000
+```
+
+### Deploy your own
+
+Import the repo in [Vercel](https://vercel.com) and add these environment variables to **Production**:
+
+| Variable | Example | Purpose |
+|---|---|---|
+| `LITELLM_BASE_URL` | your gateway URL | OpenAI-compatible AI gateway |
+| `LITELLM_API_KEY` | your key | Server-side only |
+| `LITELLM_MODEL` | `claude-sonnet-5-5` | Answers, Verifier, reports |
+| `LITELLM_FAST_MODEL` | `claude-haiku` | Frequent, simple steps |
+| `SPEND_CAP_USD` | `20` | Live AI stops at this total spend |
+| `MODEL_RPM` | `55` | App-wide model calls per minute |
+
+All other settings (access code, kill switch, shared cache) are explained in [`.env.example`](.env.example).
+
+## How it works
+
+A Conductor sends every client line through a short chain of agents and plain-code tools, while two more agents read mood and risk in parallel.
 
 ```mermaid
 flowchart LR
   L["Client line"] --> C{{"Conductor"}}
   C --> AR["Alert rules"] --> LP["Listener + Planner"] --> KS["Knowledge search"] --> AN["Answer"] --> FC["FactCheck"] --> V["Verifier"]
-  V -- "send back" --> AN
+  V -- "send back once" --> AN
   V -- "verified / defer" --> S["Say this"]
   C --> PS["Psychology"] --> S
-  C --> RK["Risk"] --> LOG["Live risk log"]
+  C --> RK["Risk"] --> LOG["Logged"]
   PS -. "mood" .-> AN
 ```
 
-- **12 AI agents** with distinct roles: Knowledge Builder, Strategist, Listener + Planner, Answer, Verifier, Psychology, Risk, Assist, Scribe, Psychologist, Risk Officer, Follow-up.
-- **4 tools in plain code** (no model cost): alert rules, knowledge search, FactCheck (dates, numbers, pricing and certification wording), US holiday calendar.
-- **Agents check each other**: the Verifier uses FactCheck results to approve or send a draft back, and the Answer agent rewrites it.
-- **Every step is visible**: click any step in the app for its Agent X-ray (output, time, tokens).
+- **12 AI agents**: Knowledge Builder, Strategist, Listener + Planner, Answer, Verifier, Psychology, Risk, Assist, Scribe, Psychologist, Risk Officer, Follow-up.
+- **4 plain-code tools** with no model cost: alert rules, knowledge search, FactCheck (dates, numbers, pricing and certification wording), US holiday calendar.
+- **Agents check each other**: the Verifier uses FactCheck results to approve a draft or send it back.
+- **Nothing hidden**: click any step on the *Agent steps* line to see its output, time and tokens.
 
-Full diagrams, agent table and data flow: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+Diagrams, agent table and code map: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
-<table>
-<tr>
-<td width="50%"><img src="public/screenshots/agent-xray.png" alt="Agent X-ray"><br/><sub>Agent X-ray: the Verifier sends a draft back</sub></td>
-<td width="50%"><img src="public/screenshots/report.png" alt="After-call report"><br/><sub>After-call report written by four agents</sub></td>
-</tr>
-<tr>
-<td width="50%"><img src="public/screenshots/knowledge.png" alt="Knowledge tab"><br/><sub>Knowledge score and three easy ways to add a project</sub></td>
-<td width="50%"><img src="public/screenshots/pre-call-brief.png" alt="Pre-call brief"><br/><sub>Pre-call brief from the Strategist</sub></td>
-</tr>
-</table>
+## Security, privacy and cost
 
-## Built for real use
+- The AI key lives only on the server. Requests are same-origin, rate-limited per IP, size-capped, and covered by a strict Content Security Policy.
+- Client text is treated as data, never as instructions, so "ignore your rules" in a transcript does nothing.
+- Knowledge, transcripts and reports are stored only in your browser. *Delete all my data* clears them.
+- Spend is capped, frequent steps use the fast model, answers are cached, and when live AI is unavailable the app switches to a recorded real run at zero cost.
 
-- **Local-first**: on-device speech in Chrome and Edge, both sides of the call captioned from the shared call audio and the mic, all data kept in the browser.
-- **Private mode**: the same agents on a local model (`npm run private`), so a real client call never leaves the laptop.
-- **Easy setup**: paste a status report and the Knowledge Builder agent does the rest. See the **[user guide](docs/USER-GUIDE.md)**.
-- **Safe and cost-efficient**: key only on the server, spend cap under the $25 key budget, 55 calls per minute limit, cache, Haiku for frequent steps, and an automatic switch to a recorded real run if live AI is unavailable. See **[docs/SECURITY.md](docs/SECURITY.md)**.
+Threat model and tests: **[docs/SECURITY.md](docs/SECURITY.md)**.
 
-## Agent-A-Thon rules compliance
+## Develop
 
-| Filter check | How Simple Call meets it |
-|---|---|
-| Own individual work | One person, own repo, own Vercel account; AI-assisted with Claude (allowed tooling) |
-| No client or internal data | All demo data is fictional; no real names, gateway addresses or internal documents in the repo |
-| No API key in the code | Key only in Vercel environment variables and a git-ignored `.env.local`; CI fails on any committed key |
-| Live on Vercel | Next.js app deployed on Vercel |
-| Safe AI-agent settings | Claude Code / Cursor in Accept Edits mode (`.claude/settings.json` sets it and blocks reading `.env` files); agents at runtime only call the model and plain-code tools |
-| Agentic, not a single prompt | 12 agents that plan, use tools, hand off and check each other |
-| Works end to end | Knowledge → brief → live answers → report → publish → history |
-| App stays up, no crashes | Spend cap, calls-per-minute limit, circuit breaker, automatic replay fallback, error boundaries |
-| Public repo matches the app | Vercel deploys every push from this repo |
-
-## Run it
-
-```bash
-npm install
-cp .env.example .env.local      # add the LiteLLM base URL, key and model from the organizers
-npm run dev                     # http://localhost:3000
-npm run check                   # typecheck + 37 unit tests + dependency audit
-```
-
-Deploy: import this repo in Vercel and add `LITELLM_BASE_URL`, `LITELLM_API_KEY`, `LITELLM_MODEL=claude-sonnet-5-5`, `LITELLM_FAST_MODEL=claude-haiku`, `SPEND_CAP_USD=20`, `MODEL_RPM=55` as environment variables.
-
-Recorded demo and screenshots: `npm run record` saves a real run to `public/demo-recording.json` (used by Instant replay), then `npm run capture` refreshes the screenshots and the presentation PDF.
-
-## Repository
+Branch, open a pull request, let CI (tests, build, audit, CodeQL, dependency review, secret scan) pass, review the Vercel preview, merge. Details: **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ```
-app/          the app, the /present slides and the API routes (one per agent workflow)
+app/          pages and API routes (one per agent workflow)
 components/   user interface
-hooks/        live call engine
+hooks/        live call engine (captions, agent stream, replay)
 lib/          agents, tools, budget and security guards, call modes
-scripts/      record the demo run, capture screenshots and the PDF
-tests/        37 unit tests
-docs/         presentation, architecture, user guide, security, submission summary
-public/       screenshots and the recorded demo run
+scripts/      record the demo run, capture screenshots, check the key
+tests/        unit tests
+docs/         user guide, BRDs, architecture, security
 ```
 
-**Tech**: Next.js 16, React 19, TypeScript, Tailwind CSS, Claude (Sonnet and Haiku) through the SSI LiteLLM gateway, Vercel.
+**Built with** Next.js 16, React 19, TypeScript, Tailwind CSS, Claude (Sonnet and Haiku) through an OpenAI-compatible gateway, Vercel.
+
+Built by Junaid Tahir for the SSI Agent-A-Thon 2026. Submission notes: [docs/AGENT-A-THON.md](docs/AGENT-A-THON.md).

@@ -91,7 +91,7 @@ const SLIDES: { dark?: boolean; body: React.ReactNode }[] = [
         <div className="flex flex-col gap-5">
           <Title kicker="See it live">One screen beside the call</Title>
           <ul className="space-y-3 text-[18px] leading-snug text-slate-700">
-            <li><b>Say this</b>: 2 to 4 spoken sentences, with sources and a facts-grounded badge.</li>
+            <li><b>Say this</b>: 1 or 2 spoken sentences, answer first, with sources and a facts-checked badge.</li>
             <li><b>Verified, revised or defer</b>: you know at a glance if it is safe to say.</li>
             <li><b>Psychology</b>: emotion, trust, what they need, how to respond.</li>
             <li><b>Agent X-ray</b>: click any step to see what each agent decided.</li>
@@ -212,8 +212,8 @@ const SLIDES: { dark?: boolean; body: React.ReactNode }[] = [
         <div className="text-[18px] font-bold uppercase tracking-[0.2em]" style={{ color: "#ee969d" }}>Try it in 90 seconds</div>
         <ol className="space-y-5 text-[30px] leading-snug text-white">
           <li><b style={{ color: "#ee969d" }}>1.</b> Open the live app: the example project is already loaded.</li>
-          <li><b style={{ color: "#ee969d" }}>2.</b> Click <b>Watch the 90-second demo</b>: a frustrated US client, live.</li>
-          <li><b style={{ color: "#ee969d" }}>3.</b> Click <b>Verifier</b> in the orchestration bar to see a draft sent back.</li>
+          <li><b style={{ color: "#ee969d" }}>2.</b> Click <b>Try the demo call</b>: a frustrated US client, live.</li>
+          <li><b style={{ color: "#ee969d" }}>3.</b> Click <b>Verifier</b> on the Agent steps line to see a draft sent back.</li>
           <li><b style={{ color: "#ee969d" }}>4.</b> <b>End call → report</b>: four agents write the minutes, RAID and email.</li>
         </ol>
         <div className="flex items-end justify-between text-[18px] text-neutral-400">

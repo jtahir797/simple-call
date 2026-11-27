@@ -1,13 +1,18 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
 permissions:
   contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   check:
+    name: Typecheck, test, audit, build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,7 +24,22 @@ jobs:
       - run: npm test
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
-      - name: No secrets committed
+      - name: No secrets or internal addresses committed
         run: |
           if git ls-files | grep -E '(^|/)\.env($|\.local$|\.production$)'; then echo "env file committed"; exit 1; fi
-          if git grep -nE 'sk-[A-Za-z0-9]{20,}' -- ':!package-lock.json'; then echo "possible API key in repo"; exit 1; fi
+          if git grep -nE 'sk-[A-Za-z0-9_-]{20,}' -- ':!package-lock.json'; then echo "possible API key in repo"; exit 1; fi
+          if git grep -nE 'LITELLM_BASE_URL=https?://[a-z0-9.-]+\.[a-z]{2,}' -- ':!*.example'; then echo "gateway address in repo"; exit 1; fi
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure

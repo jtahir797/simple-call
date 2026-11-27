@@ -23,22 +23,23 @@ async function main() {
   await p.waitForSelector("text=Knowledge score");
   await shot(p, "knowledge");
 
-  await p.click("nav >> text=2. Live call");
-  if (!(await p.isVisible("text=Instant replay"))) throw new Error("No recorded run found. Run npm run record first.");
+  await p.click("nav >> text=Live call");
   await p.click("text=Prepare me for this call");
   await p.waitForSelector("text=Likely hard questions", { timeout: 90_000 });
   await shot(p, "pre-call-brief");
 
   await p.setViewportSize({ width: 1440, height: 1320 });
+  await p.click("text=▶ Start");
+  if (!(await p.isVisible("text=Instant replay"))) throw new Error("No recorded run found. Run npm run record first.");
   await p.click("text=Instant replay");
-  await p.waitForSelector("text=Defer: outside your authority", { timeout: 180_000 });
+  await p.waitForSelector("text=commit on the call", { timeout: 180_000 });
   await p.waitForTimeout(1200);
   await shot(p, "live-call");
-  await p.locator("main div.grid.gap-4").first().screenshot({ path: `${OUT}/live-answer.png` });
+  await p.locator("[data-shot=answer]").screenshot({ path: `${OUT}/live-answer.png` });
   console.log("saved", `${OUT}/live-answer.png`);
-  await p.click("button:has-text('Verifier')");
+  await p.click("[data-shot=steps] >> button:has-text('Verifier')");
   await p.waitForTimeout(400);
-  await p.locator("text=Agent orchestration").locator("xpath=..").locator("xpath=..").screenshot({ path: `${OUT}/agent-xray.png` });
+  await p.locator("[data-shot=steps]").screenshot({ path: `${OUT}/agent-xray.png` });
   console.log("saved", `${OUT}/agent-xray.png`);
   await p.click("text=close");
   await p.setViewportSize({ width: 1440, height: 900 });
@@ -48,7 +49,8 @@ async function main() {
   await p.waitForFunction(() => !document.body.innerText.includes("Recorded run playing"), null, { timeout: 240_000 });
   await p.click("text=End call → report");
   await p.waitForSelector("text=Questions you were asked", { timeout: 60_000 }).catch(async (e) => { await p.screenshot({ path: "/tmp/capfail.png" }); throw e; });
-  await p.waitForTimeout(1500);
+  await p.waitForSelector("button:has-text('Approve & publish'):not([disabled])", { timeout: 120_000 });
+  await p.waitForTimeout(800);
   await shot(p, "report");
 
   const d = await b.newPage({ viewport: { width: 1280, height: 720 } });

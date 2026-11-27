@@ -61,79 +61,41 @@ export default function Setup({
 
   return (
     <div className="space-y-5">
-      <div className="card overflow-hidden">
-        <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
-          <div className="bg-ink px-6 py-6 text-white">
-            <div className="text-xs font-semibold uppercase tracking-widest text-brand-300">How Simple Call works</div>
-            <h2 className="mt-2 text-xl font-bold leading-snug">Feed it your project once. During the client call, a team of agents listens, answers, reads the room and logs risks.</h2>
-            <p className="mt-2 text-sm text-slate-300">
-              Built for delivery teams in Lahore talking to clients in the US and elsewhere: accurate answers in seconds, no over-promising, and editable minutes when the call ends.
+      <div className="card px-6 py-5">
+        <div className="flex flex-wrap items-start gap-4">
+          <div className="min-w-[18rem] flex-1">
+            <h2 className="text-xl font-bold text-slate-900">Know what to say on every client call.</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Add your project once. During the call, Simple Call shows a short, fact-checked answer to say, how the client is feeling, and the risks raised. After the call, it writes the minutes, RAID log and follow-up email for you to edit.
             </p>
-            <div className="mt-6 space-y-2 text-xs">
-              {[
-                ["Call audio", "On-device captions of both sides of a Teams / Meet / Zoom call (or typed lines)"],
-                ["Every line", "Conductor → Listener/Planner → Knowledge → Answer → FactCheck → Verifier (sends weak drafts back), in parallel with Psychology + Risk"],
-                ["On screen", "Verified answer to say, client mood + how to respond, live risk log"],
-                ["Call ends", "Scribe + Psychologist + Risk Officer + Follow-up write the report in parallel"],
-                ["You", "Edit, approve and publish minutes, RAID and recap email"],
-              ].map(([k, v], i) => (
-                <div key={k} className="flex items-start gap-3">
-                  <span className="grid h-5 w-5 flex-none place-items-center bg-brand-600 text-[10px] font-bold">{i + 1}</span>
-                  <span><b className="text-white">{k}:</b> <span className="text-slate-300">{v}</span></span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex gap-6 border-t border-slate-700 pt-4">
-              {[["12", "AI agents"], ["4", "deterministic tools"], ["100%", "answers fact-checked"], ["0", "keys in the browser"]].map(([n, l]) => (
-                <div key={l}><div className="text-2xl font-black text-white">{n}</div><div className="text-[11px] text-slate-400">{l}</div></div>
-              ))}
-            </div>
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 py-5 text-xs">
-            <div className="col-span-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Before and during the call</div>
-            {AGENTS_LIVE.map(([n, d]) => (
-              <div key={n}><b className="text-slate-800">{n}</b><div className="text-slate-500">{d}</div></div>
-            ))}
-            <div className="col-span-2 mt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">After the call</div>
-            {AGENTS_POST.map(([n, d]) => (
-              <div key={n}><b className="text-slate-800">{n}</b><div className="text-slate-500">{d}</div></div>
-            ))}
-          </div>
+          <button className="btn btn-primary" onClick={onStart} disabled={!ws.knowledge.trim()}>Go to live call →</button>
         </div>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <button className="btn btn-primary" onClick={() => setWs(DEMO_WORKSPACE)}>Reload the example project (fictional)</button>
-        <button className="btn btn-ghost" onClick={() => setWs(EMPTY_WORKSPACE)}>Start blank</button>
-        <button className="btn btn-ghost text-rose-600" onClick={onClearAll}>Delete all my data</button>
-        <span className="text-xs text-slate-500">Stored only in this browser, never on the server. Use public or made-up data on this public demo.</span>
-        <button className="btn btn-primary ml-auto" onClick={onStart} disabled={!ws.knowledge.trim()}>Go to live call →</button>
+        <ol className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
+          {[
+            ["Add knowledge", "Paste notes or files below, or use the example project."],
+            ["Start the call", "Live captions of Teams, Meet or Zoom, or the demo call."],
+            ["Publish the report", "Review, edit, copy or email the after-call report."],
+          ].map(([t, d], i) => (
+            <li key={t} className="flex gap-2.5 rounded-lg bg-slate-50 px-3 py-2.5">
+              <span className="grid h-5 w-5 flex-none place-items-center bg-brand-600 text-[11px] font-bold text-white">{i + 1}</span>
+              <span><b className="text-slate-800">{t}</b><span className="block text-xs text-slate-500">{d}</span></span>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3 text-xs">
+          <button className="btn btn-ghost py-1 text-xs" onClick={() => setWs(DEMO_WORKSPACE)}>Load example project</button>
+          <button className="btn btn-ghost py-1 text-xs" onClick={() => setWs(EMPTY_WORKSPACE)}>Start blank</button>
+          <button className="btn btn-ghost py-1 text-xs text-rose-600" onClick={onClearAll}>Delete all my data</button>
+          <span className={`ml-auto ${privateModel ? "font-semibold text-emerald-700" : "text-slate-500"}`}>
+            {privateModel
+              ? "Private mode: the AI model runs on this machine. Nothing leaves the laptop."
+              : "Your data stays in this browser. Audio is captioned on-device where supported. Use fictional data on the public demo."}
+          </span>
+        </div>
       </div>
 
       <KnowledgeCoach ws={ws} setWs={setWs} aiReady={aiReady} privateModel={privateModel} />
-
-      <div className="card grid gap-0 divide-y divide-slate-100 text-xs md:grid-cols-4 md:divide-x md:divide-y-0">
-        <div className="px-4 py-3">
-          <div className="label">Where your data goes</div>
-          <p className="text-slate-500">Simple Call is local-first. Pick private mode for real client calls.</p>
-        </div>
-        <div className="px-4 py-3">
-          <div className="font-semibold text-slate-800">Audio</div>
-          <p className="text-slate-500">On-device speech in Chrome or Edge: never leaves this laptop. No meeting bot joins the call.</p>
-        </div>
-        <div className="px-4 py-3">
-          <div className="font-semibold text-slate-800">Knowledge, transcripts, reports</div>
-          <p className="text-slate-500">Stored only in this browser. Never saved or logged on the server. Delete any time.</p>
-        </div>
-        <div className="px-4 py-3">
-          <div className="font-semibold text-slate-800">AI model</div>
-          <p className={privateModel ? "font-semibold text-emerald-700" : "text-slate-500"}>
-            {privateModel
-              ? "Private mode: the model runs on this machine. Nothing leaves the laptop."
-              : "SSI LiteLLM gateway (public demo: fictional data only). Run private mode with a local model for real client data."}
-          </p>
-        </div>
-      </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <div className="card space-y-4 p-5">
@@ -187,6 +149,15 @@ export default function Setup({
           <textarea className="input min-h-[460px] flex-1 font-mono text-xs leading-relaxed" maxLength={KB_LIMIT} value={ws.knowledge} onChange={set("knowledge")} placeholder="## Current status&#10;..." />
         </div>
       </div>
+
+      <details className="card px-5 py-3 text-xs">
+        <summary className="cursor-pointer text-sm font-semibold text-slate-600">How it works: 12 agents and 4 tools</summary>
+        <div className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+          {[...AGENTS_LIVE, ...AGENTS_POST].map(([n, d]) => (
+            <div key={n}><b className="text-slate-800">{n}</b><span className="text-slate-500"> · {d}</span></div>
+          ))}
+        </div>
+      </details>
     </div>
   );
 }
