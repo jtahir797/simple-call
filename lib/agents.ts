@@ -105,11 +105,11 @@ Rules:
 - Follow the GUARDRAILS strictly. Pricing, contract terms, certifications, legal, or commitments beyond the employee's authority: polite deferral (set "defer": true) that still gives the client a clear next step, owner and timeframe.
 - Style for US business clients: lead with the direct answer in the first sentence, be concise and confident, own problems without blaming the client, use specific dates and numbers from the knowledge, close with a next step.
 - Adapt tone to the client's mood: acknowledge frustration briefly before facts when they are upset.
-- Speak as the employee ("we", "I"). 2 to 4 short spoken sentences. No bullet points inside sayThis.
-- Keep it short: sayThis under 70 words, each keyPoints entry under 12 words.
+- Speak as the employee ("we", "I"). Write it ready to say word for word: 1 or 2 short spoken sentences, the answer first, then the next step if needed. No bullet points, no filler ("Great question", "To be honest").
+- Keep it short: sayThis under 40 words, at most 3 keyPoints of under 8 words each.
 ${feedback ? "- REVISION: your previous draft was sent back by the Verifier. Fix every issue listed. Remove or correct any fact marked NOT grounded. If a policy topic was flagged, defer it properly." : ""}
 ${SAFETY}
-JSON shape: {"sayThis": string, "keyPoints": [up to 4 short facts with numbers], "sources": [knowledge section titles you used], "confidence": number 0-1, "defer": boolean, "followUp": "optional short question to ask the client back, or empty string"}`;
+JSON shape: {"sayThis": string, "keyPoints": [up to 3 short facts with numbers], "sources": [knowledge section titles you used], "confidence": number 0-1, "defer": boolean, "followUp": "optional short question to ask the client back, or empty string"}`;
   const fb = feedback
     ? `\n\nYOUR PREVIOUS DRAFT:\n<draft>${fence(feedback.draft)}</draft>\nVERIFIER ISSUES:\n${feedback.issues.map((i) => "- " + i).join("\n") || "- (none listed)"}\nFACT CHECK TOOL: ${feedback.check.facts.map((f) => `${f.fact}=${f.grounded ? "grounded" : "NOT grounded"}`).join(", ") || "no facts"}; policy flags: ${feedback.check.policy.join(", ") || "none"}`
     : "";
@@ -117,7 +117,7 @@ JSON shape: {"sayThis": string, "keyPoints": [up to 4 short facts with numbers],
   const r = await runAgent<Partial<AnswerOut>>({ system, user, tier: "main", maxTokens: 800 });
   return map(r, (d) => ({
     sayThis: String(d.sayThis ?? "").slice(0, 1200),
-    keyPoints: arr(d.keyPoints, 4),
+    keyPoints: arr(d.keyPoints, 3),
     sources: arr(d.sources, 5),
     confidence: clamp(d.confidence, 0, 1, 0.5),
     defer: Boolean(d.defer),
@@ -169,7 +169,7 @@ export async function pulseAgent(
 Do not diagnose or label personality. Describe what the language signals and what the client most likely needs from the employee right now (e.g. cover with their leadership, certainty on dates, being heard).
 Consider typical US business communication: directness is normal, politeness can mask frustration ("I'll be honest..."), and "fine" or "ok" after a concession can mean reluctant acceptance.
 ${SAFETY}
-JSON shape: {"score": number -1 (very negative) to 1 (very positive), "emotion": one or two words, "intensity": number 0-1, "trust": "low|medium|high", "cues": [up to 3 short exact quotes from the client], "need": "underlying need in under 12 words", "tip": "one actionable sentence on how the employee should respond right now"}`;
+JSON shape: {"score": number -1 (very negative) to 1 (very positive), "emotion": one or two words, "intensity": number 0-1, "trust": "low|medium|high", "cues": [up to 3 short exact quotes from the client], "need": "underlying need in under 8 words", "tip": "one short instruction, under 15 words, on how to respond right now"}`;
   const prevTxt = prev ? `Previous read: ${fence(prev.emotion)}, score ${prev.score.toFixed(2)}, trust ${prev.trust}.` : "No previous read.";
   const user = `${contextBlock(ws)}\n\n${prevTxt}\n\nRECENT TRANSCRIPT:\n${fmtLines(recent, ws)}\n\nLATEST CLIENT LINE:\n<transcript>${fence(latest.text)}</transcript>`;
   const r = await runAgent<Partial<Pulse>>({ system, user, tier: "fast", maxTokens: 450 });
@@ -223,8 +223,8 @@ export async function strategistAgent(ws: Workspace, lastCallNotes: string, agen
 Predict the 5 hardest questions the client is likely to ask given the project's current status, open risks and recent mood, and give a short grounded answer for each using ONLY the knowledge. Mark questions that must be deferred per the guardrails.
 Also give: the call objective, a strong opening line, a mood forecast, landmines to avoid, must-say points, and 2 to 4 good questions the employee should ask the client. Fit everything to the call mode and the agenda.
 ${SAFETY}
-LIMITS (strict): exactly 5 likelyQuestions, each q under 15 words and each answer under 30 words. objective, openingLine and moodForecast under 25 words each. At most 4 landmines and 4 mustSay, 2 to 4 questionsToAsk, each under 15 words. No preamble and no repetition.
-JSON shape: {"objective": string, "openingLine": string, "moodForecast": string, "likelyQuestions": [{"q": string, "answer": "2 sentences max", "risk": "low|medium|high", "defer": boolean}], "landmines": [string], "mustSay": [string], "questionsToAsk": [string]}`;
+LIMITS (strict): exactly 5 likelyQuestions, each q under 15 words and each answer under 25 words, ready to say aloud. objective, openingLine and moodForecast under 25 words each. At most 4 landmines and 4 mustSay, 2 to 4 questionsToAsk, each under 15 words. No preamble and no repetition.
+JSON shape: {"objective": string, "openingLine": string, "moodForecast": string, "likelyQuestions": [{"q": string, "answer": "1 or 2 spoken sentences", "risk": "low|medium|high", "defer": boolean}], "landmines": [string], "mustSay": [string], "questionsToAsk": [string]}`;
   const user = `${contextBlock(ws)}\n\nPROJECT KNOWLEDGE:\n<knowledge>\n${fence(ws.knowledge.slice(0, 24_000))}\n</knowledge>\n\nNOTES FROM THE LAST CALL:\n<notes>\n${fence(lastCallNotes.slice(0, 4000)) || "(no previous call recorded)"}\n</notes>\n\nAGENDA AND ATTENDEES FOR THIS CALL:\n<notes>\n${fence(agenda.slice(0, 2000)) || "(not provided)"}\n</notes>`;
   const r = await runAgent<Partial<Brief>>({ system, user, tier: "main", maxTokens: 1800 });
   const risks = ["low", "medium", "high"];
@@ -250,7 +250,7 @@ const ACTION_TASK: Record<Exclude<QuickAction, "answer">, string> = {
   clarify:
     'In one line, say in plain words what the client just asked or said and what they probably want from the employee. Start with "They\'re asking". JSON: {"text": string}',
   recap:
-    'Summarise this part of the call in 3 to 5 short bullets, each starting with "- ". Include decisions, actions and open questions if any. JSON: {"text": "bullets separated by newlines"}',
+    'Summarise this part of the call in 3 or 4 short bullets, each starting with "- ". Include decisions, actions and open questions if any. JSON: {"text": "bullets separated by newlines"}',
   followup:
     'Suggest 2 or 3 short, good questions the employee could ask the client now, based on the conversation, the call mode and the knowledge. One per line, each starting with "- ". JSON: {"text": "questions separated by newlines"}',
 };
@@ -259,7 +259,7 @@ const ACTION_TASK: Record<Exclude<QuickAction, "answer">, string> = {
 export async function assistAgent(ws: Workspace, lines: Line[], action: Exclude<QuickAction, "answer">): Promise<AgentResult<{ text: string }>> {
   const system = `You are the ASSIST agent in a live client-call copilot. The employee pressed a quick-action button mid-call and will glance at your reply for two seconds. Plain spoken language, no preamble, no invented facts.
 ${SAFETY}
-LIMITS (strict): the whole reply under 60 words.
+LIMITS (strict): the whole reply under 45 words. Each bullet under 12 words.
 TASK: ${ACTION_TASK[action]}`;
   const user = `${contextBlock(ws)}\n\nTRANSCRIPT (${action === "recap" ? "last few minutes" : "most recent lines"}):\n${fmtLines(lines, ws)}`;
   const r = await runAgent<{ text?: string }>({ system, user, tier: action === "clarify" ? "fast" : "main", maxTokens: 350 });

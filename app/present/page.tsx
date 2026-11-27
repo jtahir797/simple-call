@@ -91,7 +91,7 @@ const SLIDES: { dark?: boolean; body: React.ReactNode }[] = [
         <div className="flex flex-col gap-5">
           <Title kicker="See it live">One screen beside the call</Title>
           <ul className="space-y-3 text-[18px] leading-snug text-slate-700">
-            <li><b>Say this</b>: 2 to 4 spoken sentences, with sources and a facts-grounded badge.</li>
+            <li><b>Say this</b>: 1 or 2 spoken sentences, answer first, with sources and a facts-checked badge.</li>
             <li><b>Verified, revised or defer</b>: you know at a glance if it is safe to say.</li>
             <li><b>Psychology</b>: emotion, trust, what they need, how to respond.</li>
             <li><b>Agent X-ray</b>: click any step to see what each agent decided.</li>
@@ -184,7 +184,7 @@ const SLIDES: { dark?: boolean; body: React.ReactNode }[] = [
       <div className="flex h-full flex-col gap-7">
         <Title kicker="Safe and cost-efficient">Secured like a product, budgeted to survive judging</Title>
         <div className="grid grid-cols-2 gap-5">
-          <Box title="Security">Key only in server environment variables · same-origin check · per-IP rate limits · input caps · prompt-injection fencing · strict CSP · secret scan in CI · 37 unit tests.</Box>
+          <Box title="Security">Key only in server environment variables · same-origin check · per-IP rate limits · input caps · prompt-injection fencing · strict CSP · secret scan in CI · 39 unit tests.</Box>
           <Box title="Cost">Alert rules and small-talk filter skip the model · cache makes repeat demos free · Haiku for frequent steps · tools in plain code · capped context and replies.</Box>
           <Box title="$25 key budget, protected">Spend cap read from the gateway itself, app-wide limit under 60 calls a minute (bursts queue, never fail), circuit breaker on budget errors.</Box>
           <Box title="Never a broken demo" dark>If live AI is unavailable, the app switches to a recorded real run automatically: zero tokens, same experience.</Box>
@@ -212,8 +212,8 @@ const SLIDES: { dark?: boolean; body: React.ReactNode }[] = [
         <div className="text-[18px] font-bold uppercase tracking-[0.2em]" style={{ color: "#ee969d" }}>Try it in 90 seconds</div>
         <ol className="space-y-5 text-[30px] leading-snug text-white">
           <li><b style={{ color: "#ee969d" }}>1.</b> Open the live app: the example project is already loaded.</li>
-          <li><b style={{ color: "#ee969d" }}>2.</b> Click <b>Watch the 90-second demo</b>: a frustrated US client, live.</li>
-          <li><b style={{ color: "#ee969d" }}>3.</b> Click <b>Verifier</b> in the orchestration bar to see a draft sent back.</li>
+          <li><b style={{ color: "#ee969d" }}>2.</b> Click <b>Try the demo call</b>: a frustrated US client, live.</li>
+          <li><b style={{ color: "#ee969d" }}>3.</b> Click <b>Verifier</b> on the Agent steps line to see a draft sent back.</li>
           <li><b style={{ color: "#ee969d" }}>4.</b> <b>End call → report</b>: four agents write the minutes, RAID and email.</li>
         </ol>
         <div className="flex items-end justify-between text-[18px] text-neutral-400">

@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { completeJson, retryMaxTokens, type Completion } from "../lib/llm";
+import { completeJson, parseJson, retryMaxTokens, type Completion } from "../lib/llm";
 
 const ok = (content: string, finish = "stop", outTok = 10): Completion => ({ content, finish, inTok: 100, outTok });
 const cut = (content: string, outTok = 10): Completion => ok(content, "length", outTok);
@@ -65,5 +65,26 @@ test("a failed parse carries finishReason so it can be logged without the reply 
 test("no retry when max_tokens is already at the cap", async () => {
   let calls = 0;
   await assert.rejects(completeJson(async () => (calls++, cut('{"a":[')), 3500), /did not return JSON/);
+  assert.equal(calls, 1);
+});
+
+test("parseJson keeps the first complete object and ignores text or a repeat after it", () => {
+  const one = '{"emotion": "frustrated", "cues": ["a {quoted} brace", "say \\"no\\""], "tip": "Acknowledge first"}';
+  assert.deepEqual(parseJson(one), JSON.parse(one));
+  assert.deepEqual(parseJson("Here is the read:\n" + one + "\n\nExplanation: the client {was} upset and"), JSON.parse(one));
+  assert.deepEqual(parseJson(one + "\n" + one + "\n{\"emotion\": \"cut"), JSON.parse(one));
+  assert.deepEqual(parseJson("```json\n" + one + "\n```\nmore"), JSON.parse(one));
+  assert.throws(() => parseJson('{"emotion": "cut off'));
+  assert.throws(() => parseJson("no json here"));
+});
+
+test("a complete object followed by rambling up to the limit is accepted without a retry", async () => {
+  let calls = 0;
+  const call = async (): Promise<Completion> => {
+    calls++;
+    return { content: '{"emotion":"calm"}\nThe client seems calm because ' + "and ".repeat(300), finish: "length", inTok: 10, outTok: 450 };
+  };
+  const r = await completeJson<{ emotion: string }>(call, 450);
+  assert.equal(r.data.emotion, "calm");
   assert.equal(calls, 1);
 });

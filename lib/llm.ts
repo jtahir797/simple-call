@@ -44,9 +44,22 @@ export function parseJson<T>(text: string): T {
   const fence = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
   if (fence) s = fence[1].trim();
   const start = s.indexOf("{");
-  const end = s.lastIndexOf("}");
-  if (start === -1 || end === -1) throw new Error("Agent did not return JSON");
-  return JSON.parse(s.slice(start, end + 1)) as T;
+  if (start === -1) throw new Error("Agent did not return JSON");
+  // Take the first complete top-level object, so text or a second object after it cannot break parsing.
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  for (let i = start; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === "\\") esc = true;
+      else if (ch === '"') inStr = false;
+    } else if (ch === '"') inStr = true;
+    else if (ch === "{") depth++;
+    else if (ch === "}" && --depth === 0) return JSON.parse(s.slice(start, i + 1)) as T;
+  }
+  throw new Error("Agent did not return JSON");
 }
 
 export interface AgentResult<T> {

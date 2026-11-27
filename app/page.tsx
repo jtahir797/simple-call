@@ -30,7 +30,7 @@ export default function Home() {
   const [briefTokens, setBriefTokens] = useState<number | null>(null);
 
   useEffect(() => {
-    // First visit (e.g. an evaluator): the fictional demo project is preloaded so the demo is one click away.
+    // First visit: the fictional demo project is preloaded so the demo is one click away.
     const stored = load<Workspace>("cp.ws", DEMO_WORKSPACE);
     setWsState(stored && typeof stored.knowledge === "string" ? { ...DEMO_WORKSPACE, ...stored } : DEMO_WORKSPACE);
     const h = load<SavedCall[]>("cp.history", []);
@@ -162,9 +162,9 @@ export default function Home() {
   };
 
   const TABS: [Tab, string][] = [
-    ["setup", "1. Knowledge"],
-    ["live", "2. Live call"],
-    ["report", "3. After-call report"],
+    ["setup", "Knowledge"],
+    ["live", "Live call"],
+    ["report", "Report"],
     ["history", `History (${history.length})`],
   ];
   const aiReady = Boolean(health?.configured && !health.budget.exhausted);
@@ -177,7 +177,7 @@ export default function Home() {
             <div className="grid h-8 w-8 place-items-center bg-brand-600 text-xs font-black tracking-tight">SC</div>
             <div>
               <div className="text-base font-bold leading-tight">Simple Call</div>
-              <div className="text-[11px] leading-tight text-neutral-400">Multi-agent copilot for client calls</div>
+              <div className="text-[11px] leading-tight text-neutral-400">Know what to say on every client call</div>
             </div>
           </div>
           <nav className="flex flex-wrap gap-1">
@@ -189,22 +189,21 @@ export default function Home() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-3 text-xs">
-            <a href="/present" className="rounded-md px-2 py-1 font-medium text-neutral-300 hover:bg-neutral-800">Presentation</a>
             {!cp.demo.on && (aiReady || cp.recording) && tab !== "live" && (
-              <button className="btn bg-brand-600 py-1 text-white hover:bg-brand-700" onClick={watchDemo}>▶ Watch the 90-second demo</button>
+              <button className="btn bg-brand-600 py-1 text-white hover:bg-brand-700" onClick={watchDemo}>▶ Try the demo call</button>
             )}
             {health == null ? null : aiReady ? (
-              <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-emerald-300" title={`Rate limits and budget on ${health.store} store · ${health.budget.usedPct}% of today's AI budget used`}>
-                ● {health.privateModel ? `Private mode: ${health.model} on this machine` : `${health.model} via LiteLLM · secured`}
+              <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-emerald-300" title={`${health.privateModel ? "Private mode: model runs on this machine" : `${health.model} via the AI gateway`} · ${health.budget.usedPct}% of the AI budget used`}>
+                ● {health.privateModel ? "Private mode" : "AI ready"}
               </span>
             ) : (
-              <span className="rounded-full bg-amber-500/15 px-2.5 py-1 text-amber-300">● {health.configured ? "Daily AI budget reached" : "Live AI off"}{cp.recording ? " · replay available" : ""}</span>
+              <span className="rounded-full bg-amber-500/15 px-2.5 py-1 text-amber-300">● {health.configured ? "AI budget reached" : "Live AI off"}{cp.recording ? " · replay available" : ""}</span>
             )}
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1400px] px-5 py-5">
+      <main className="mx-auto max-w-[1200px] px-5 py-5">
         {ws.projectName && tab !== "setup" && (
           <div className="no-print mb-3 text-sm text-slate-500">
             <b className="text-slate-800">{ws.projectName}</b> · {ws.clientName} · {ws.clientCompany}
@@ -248,7 +247,8 @@ export default function Home() {
         )}
       </main>
       <footer className="no-print pb-6 text-center text-xs text-slate-400">
-        SSI Agent-A-Thon 2026 · Demo uses fictional data only · No transcript is stored on the server
+        Calls and reports are stored only in this browser · Demo data is fictional ·{" "}
+        <a href="/present" className="underline hover:text-slate-600">Product tour</a>
       </footer>
     </div>
   );

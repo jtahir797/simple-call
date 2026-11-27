@@ -27,7 +27,7 @@ flowchart LR
   C & P --> B --> LLM
 ```
 
-- Every agent step streams back to the screen as it finishes, so the user (and evaluators) can watch the orchestration and open any step in the Agent X-ray.
+- Every agent step streams back to the screen as it finishes, so the user can watch the orchestration and open any step in the Agent X-ray.
 - Nothing about the call is stored on the server. Each request carries only the recent transcript window and the project knowledge it needs.
 
 ## 2. One client question, step by step
@@ -75,7 +75,7 @@ sequenceDiagram
 | 1 | Knowledge Builder | Setup | Sonnet | Turns pasted documents into the knowledge format and asks for gaps |
 | 2 | Strategist | Before the call | Sonnet | Pre-call brief: likely hard questions, landmines, opening line |
 | 3 | Listener + Planner | Each client line | Haiku | Decides if an answer is needed; plans searches for the Knowledge tool |
-| 4 | Answer | Each question | Sonnet | Drafts what to say; revises when the Verifier sends it back |
+| 4 | Answer | Each question | Sonnet | Drafts what to say (1 or 2 sentences, under 40 words); revises when the Verifier sends it back |
 | 5 | Verifier | Each question | Sonnet | Approves, sends back, or forces a deferral, using FactCheck results |
 | 6 | Psychology | Each client line | Haiku | Emotion, trust, underlying need, how to respond; feeds the Answer agent's tone |
 | 7 | Risk | Each client line | Haiku | Risks, issues, actions and commitments, de-duplicated |
@@ -96,7 +96,7 @@ The **Conductor** is plain code: it routes each line, runs chains in parallel or
 | FactCheck | Every date and number in a draft must exist in the knowledge; scans for pricing, certification, legal and guarantee wording |
 | US calendar | Flags promised dates that fall on a US weekend or federal holiday |
 
-## 5. Staying up through judging
+## 5. Staying up when live AI is unavailable
 
 ```mermaid
 flowchart LR
@@ -143,6 +143,8 @@ lib/budget.ts            spend cap, calls per minute, circuit breaker
 lib/guard.ts             origin check, rate limits, input validation
 lib/modes.ts             six call modes
 lib/checklist.ts         knowledge checklist and Claude / ChatGPT prompt
-scripts/                 record the demo run, capture screenshots and the PDF
-tests/                   37 unit tests
+scripts/                 record the demo run, capture screenshots and the PDF, check the key
+tests/                   39 unit tests
+docs/brd/                one business requirements doc per feature
+.github/                 CI, CodeQL, Dependabot, PR template, CODEOWNERS
 ```

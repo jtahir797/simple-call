@@ -28,6 +28,7 @@ export default function Report(props: {
   const { call, report, events, generating } = props;
   const [editing, setEditing] = useState<Partial<Record<keyof ReportSections, boolean>>>({});
   const [copied, setCopied] = useState(false);
+  const [more, setMore] = useState(false);
 
   const dur = call.startedAt ? Math.round(((call.endedAt ?? Date.now()) - call.startedAt) / 1000) : 0;
   const verified = call.suggestions.filter((s) => s.verdict === "verified").length;
@@ -35,11 +36,10 @@ export default function Report(props: {
   const last = call.pulses[call.pulses.length - 1]?.score;
   const stats = [
     ["Duration", `${Math.floor(dur / 60)}m ${dur % 60}s`],
-    ["Transcript lines", String(call.lines.length)],
-    ["Questions answered", String(call.suggestions.length)],
-    ["Verified as-is", call.suggestions.length ? `${Math.round((verified / call.suggestions.length) * 100)}%` : "-"],
+        ["Answers", String(call.suggestions.length)],
+    ["Verified", call.suggestions.length ? `${Math.round((verified / call.suggestions.length) * 100)}%` : "-"],
     ["Sentiment", first != null && last != null ? `${first.toFixed(2)} → ${last.toFixed(2)}` : "-"],
-    ["Items logged", String(call.log.length)],
+    ["Logged", String(call.log.length)],
   ];
 
   const text = report ? fullReport(report) : "";
@@ -58,45 +58,44 @@ export default function Report(props: {
 
   return (
     <div className="space-y-4">
-      <div className="card no-print grid grid-cols-3 divide-x divide-slate-100 md:grid-cols-6">
-        {stats.map(([k, v]) => (
-          <div key={k} className="px-4 py-3">
-            <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{k}</div>
-            <div className="mt-0.5 text-lg font-bold text-slate-800">{v}</div>
+      <div className="card no-print px-5 py-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex-1">
+            <div className="text-lg font-bold text-slate-900">After-call report</div>
+            <div className="text-xs text-slate-500">
+              {stats.filter(([, v]) => v !== "-").map(([k, v]) => `${k}: ${v}`).join(" · ")}
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="card no-print flex flex-wrap items-center gap-2 px-4 py-3">
-        <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Post-call agents</span>
-        {SECTIONS.map((s) => {
-          const ev = events[s.agent];
-          const cls =
-            ev?.status === "running" ? "border-brand-300 bg-brand-50 text-brand-700" : ev?.status === "ok" ? "border-emerald-300 bg-emerald-50 text-emerald-800" : ev?.status === "error" ? "border-rose-300 bg-rose-50 text-rose-700" : "border-slate-200 text-slate-400";
-          return (
-            <span key={s.agent} className={`rounded-lg border px-2.5 py-1 text-xs font-semibold ${cls}`} title={ev?.note}>
-              <span className={ev?.status === "running" ? "blink" : ""}>{s.agent === "RiskOfficer" ? "Risk Officer" : s.agent === "FollowUp" ? "Follow-up" : s.agent}</span>
-              {ev?.ms != null && <span className="ml-1.5 font-mono text-[10px] font-normal">{(ev.ms / 1000).toFixed(1)}s</span>}
-              {ev?.status === "ok" && <span className="ml-1 text-[10px] font-normal">{ev.cached ? "cached" : ev.tokens ? `${(ev.tokens / 1000).toFixed(1)}k tok` : call.replay ? "recorded" : ""}</span>}
-            </span>
-          );
-        })}
-        <div className="ml-auto flex flex-wrap gap-2">
-          <button className="btn btn-ghost" onClick={props.onGenerate} disabled={generating}>{report ? "Regenerate" : generating ? "Generating…" : "Generate report"}</button>
           <button className="btn btn-ghost" disabled={!report} onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? "Copied" : "Copy all"}</button>
-          <button className="btn btn-ghost" disabled={!report} onClick={() => download(fname, text)}>Download .md</button>
-          <button className="btn btn-ghost" disabled={!report} onClick={() => window.print()}>Print / PDF</button>
-          <button className="btn btn-ghost" disabled={!report} onClick={openEmail}>Open email draft</button>
-          <button className="btn btn-primary" disabled={!report || generating} onClick={props.onPublish}>{props.published ? "Published ✓ (update)" : "Approve & publish"}</button>
+          <button className="btn btn-ghost" disabled={!report} onClick={openEmail}>Email draft</button>
+          <div className="relative">
+            <button className="btn btn-ghost px-2.5" onClick={() => setMore(!more)} title="More">⋯</button>
+            {more && (
+              <div className="pop absolute right-0 top-11 z-20 w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-xl" onClick={() => setMore(false)}>
+                <button className="block w-full px-4 py-2 text-left hover:bg-slate-50 disabled:opacity-40" disabled={!report} onClick={() => download(fname, text)}>Download .md</button>
+                <button className="block w-full px-4 py-2 text-left hover:bg-slate-50 disabled:opacity-40" disabled={!report} onClick={() => window.print()}>Print or save PDF</button>
+                <button className="block w-full px-4 py-2 text-left hover:bg-slate-50 disabled:opacity-40" disabled={generating} onClick={props.onGenerate}>{report ? "Regenerate" : "Generate"}</button>
+              </div>
+            )}
+          </div>
+          <button className="btn btn-primary" disabled={!report || generating} onClick={props.onPublish}>{props.published ? "Published ✓" : "Approve & publish"}</button>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
+          {SECTIONS.map((s) => {
+            const ev = events[s.agent];
+            const dot = ev?.status === "running" ? "blink bg-brand-500" : ev?.status === "ok" ? "bg-emerald-500" : ev?.status === "error" ? "bg-rose-500" : "bg-slate-200";
+            return (
+              <span key={s.agent} className="flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-slate-600" title={ev?.note}>
+                <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+                {s.agent === "RiskOfficer" ? "Risk Officer" : s.agent === "FollowUp" ? "Follow-up" : s.agent}
+                {ev?.ms != null && <span className="font-mono text-[10px] text-slate-400">{(ev.ms / 1000).toFixed(1)}s</span>}
+              </span>
+            );
+          })}
+          {report && !props.published && <span className="ml-auto text-amber-700">Draft: review and edit, then approve to save it to History.</span>}
         </div>
       </div>
       {props.error && <div className="no-print rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700">{props.error}</div>}
-      {report && !props.published && (
-        <div className="no-print rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-800">
-          Draft. Review and edit each section, then <b>Approve & publish</b> to save it to History.
-        </div>
-      )}
-
       <div className="grid gap-4 xl:grid-cols-2">
         {SECTIONS.map((s) => {
           const val = report?.[s.key] ?? "";

@@ -115,7 +115,7 @@ export function psychologyMd(d: AnyObj): string {
     `**Overall:** ${s(d.overall)}`,
     `**Sentiment:** ${num(d.startScore)} at start to ${num(d.endScore)} at end  \n**Trust trend:** ${s(d.trustTrend)}  \n**Relationship risk:** ${s(d.relationshipRisk)}`,
     `### Emotional arc\n${
-      list(d.arc).length ? list(d.arc).map((a) => `- **${s(a.emotion)}** - "${s(a.moment)}": ${s(a.note)}`).join("\n") : "- -"
+      list(d.arc).length ? list(d.arc).map((a) => `- **${s(a.emotion)}** - "${s(a.moment).replace(/^["“'\s]+|["”'\s]+$/g, "")}": ${s(a.note)}`).join("\n") : "- -"
     }`,
     `### What is driving the client\n${bullets(strs(d.drivers))}`,
     `### Communication style shown\n${bullets(strs(d.communicationStyle))}`,

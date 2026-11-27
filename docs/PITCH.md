@@ -14,14 +14,14 @@ Simple Call is a multi-agent copilot for client calls. The employee loads the pr
 
 0. **Knowledge** (optional, 15s): Knowledge score 11/11 on the example; show *Fill it with Claude or ChatGPT* and *Paste documents here*: "setup takes five minutes, nobody writes a knowledge base by hand."
 1. **Pre-call brief** (15s): *Prepare me for this call*. "Before I dial in, the Strategist tells me the five hardest questions and what not to say."
-2. **Live call** (60s): *Watch the 90-second demo* (or *Play demo US client call* on the Live call tab).
+2. **Live call** (60s): *Try the demo call* (or *Start → Play demo US client call* on the Live call tab).
    - Psychology: *frustrated, trust low*, tip "acknowledge first, then the date".
    - "Is February 15th still real?" → grounded answer, *facts grounded* badge, and the **US calendar tool** flags that 15 Feb 2027 is Presidents' Day in the US.
-   - "What would offline mode cost?" → open the **Verifier X-ray**: draft sent back, Answer revised into a proper deferral (no price on the call, Account Manager within 3 business days).
+   - "What would offline mode cost?" → click **Verifier** on the *Agent steps* line: draft sent back, Answer revised into a proper deferral (no price on the call, Account Manager within 3 business days).
    - "Are you SOC 2?" → deferred again.
    - Press `R` for a 5-minute recap and `V` for the beside-the-call view; switch the mode to *Commercial / change request* to show the coaching style change.
-   - Point at the token meter and "served from cache".
-3. **Report** (30s): four agents in parallel; RAG status; edit one line; *Approve & publish*; *Open email draft*.
+   - Open the ⚙ settings to show the token count and "cached".
+3. **Report** (30s): four agents in parallel; RAG status; edit one line; *Approve & publish*; *Email draft*.
 4. **Close** (15s): "Every answer is fact-checked before I say it, every risk is captured, the paperwork is done when the call ends, and it cannot run up a bill."
 
 ## Criteria mapping
@@ -30,7 +30,7 @@ Simple Call is a multi-agent copilot for client calls. The employee loads the pr
 |---|---|
 | Completeness (incl. orchestration) | Pre-call → live → post-call → publish → history. 12 AI agents + 4 tools, parallel and sequential chains, loop-back revision, Agent X-ray on every step |
 | Creativity | Live client psychology with "how to respond now"; US holiday check on promised dates; pre-call Strategist |
-| Technical execution | Key never in code or browser, 37 unit tests, CI with audit and secret scan, input validation, streaming, cache, budget |
+| Technical execution | Key never in code or browser, 39 unit tests, CI with audit and secret scan, input validation, streaming, cache, budget |
 | Presentation | One-click demo, preloaded project, Instant replay fallback, SSI branding |
 | Business value | Faster accurate answers to US clients, no unauthorised commitments, early warning on unhappy clients, minutes and RAID on time, feeds PMO governance |
 
