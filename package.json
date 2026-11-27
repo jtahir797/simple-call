@@ -1,0 +1,34 @@
+{
+  "name": "simple-call",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --conditions=react-server --import tsx --test tests/*.test.ts",
+    "record": "tsx scripts/record-demo.ts",
+    "check": "npm run typecheck && npm test && npm audit --omit=dev --audit-level=high",
+    "private": "next build && next start -H 127.0.0.1 -p 3000",
+    "capture": "tsx scripts/capture.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/roboto": "^5.3.0",
+    "next": "^16.4.6",
+    "openai": "^5.23.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright": "^1.63.0",
+    "tailwindcss": "^4.1.13",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.2"
+  }
+}

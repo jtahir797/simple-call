@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/* SSI brand: red B91F2A, charcoal 404040, Roboto */
+@theme {
+  --color-brand-50: #fdf3f4;
+  --color-brand-100: #fbe4e6;
+  --color-brand-200: #f6c4c8;
+  --color-brand-300: #ee969d;
+  --color-brand-400: #e0606b;
+  --color-brand-500: #cc3742;
+  --color-brand-600: #b91f2a;
+  --color-brand-700: #9c1a23;
+  --color-brand-800: #811820;
+  --color-brand-900: #6b181e;
+  --color-ink: #262626;
+  --color-charcoal: #404040;
+  --font-sans: "Roboto Variable", Roboto, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+:root {
+  --bg: #f5f6f8;
+  --ink: #0f172a;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.card {
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+}
+.card-h {
+  @apply flex items-center justify-between border-b border-slate-100 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+}
+.btn {
+  @apply inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40;
+}
+.btn-primary {
+  @apply bg-brand-600 text-white hover:bg-brand-700;
+}
+.btn-ghost {
+  @apply border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+}
+.btn-danger {
+  @apply bg-rose-600 text-white hover:bg-rose-700;
+}
+.input {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+}
+.label {
+  @apply mb-1 block text-xs font-semibold text-slate-600;
+}
+.chip {
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pop {
+  animation: pop 0.25s ease-out;
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.blink {
+  animation: pulse-dot 1s infinite;
+}
+
+/* rendered markdown */
+.md {
+  @apply text-sm leading-relaxed text-slate-800;
+}
+.md h2 {
+  @apply mb-2 mt-1 text-lg font-bold text-slate-900;
+}
+.md h3 {
+  @apply mb-1.5 mt-4 text-sm font-bold uppercase tracking-wide text-brand-700;
+}
+.md h4,
+.md h5 {
+  @apply mb-1 mt-3 font-semibold;
+}
+.md p {
+  @apply my-2;
+}
+.md ul {
+  @apply my-1.5 list-disc pl-5;
+}
+.md li {
+  @apply my-0.5;
+}
+.md table {
+  @apply my-2 w-full border-collapse text-xs;
+}
+.md th {
+  @apply border border-slate-200 bg-slate-50 px-2 py-1 text-left font-semibold;
+}
+.md td {
+  @apply border border-slate-200 px-2 py-1 align-top;
+}
+.md hr {
+  @apply my-6 border-slate-200;
+}
+.md .box {
+  @apply mr-1.5 inline-block h-3 w-3 translate-y-0.5 rounded-sm border border-slate-400;
+}
+.md .box.done {
+  @apply bg-emerald-500;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+.print-only {
+  display: none;
+}
